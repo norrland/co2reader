@@ -1,0 +1,5 @@
+%{
+  "circuits_uart": {:hex, :circuits_uart, "1.5.1", "c28f0144db799a8dbe84e1a05a58808450dd13a48b4e8ed92aa0a785ccfbbb1d", [:mix], [{:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm", "e0690f814e39c0e7cc742ccd1421d5489f6a7627477ff64c1dbaf7520c1b5600"},
+  "elixir_make": {:hex, :elixir_make, "0.7.4", "5439110c964ffdd8212ca919b5b8beac423085a77ad33d5e394abe812c2d2d75", [:mix], [{:castore, "~> 0.1", [hex: :castore, repo: "hexpm", optional: true]}], "hexpm", "70c33052f7b00c813fd66d15a3cf1f7d1e122860c572ec81b8181b1276074157"},
+  "hid": {:git, "https://github.com/lawik/hid.git", "427128e4b9bcd810661f2fae4a5626b7f8a3c14e", []},
+}
