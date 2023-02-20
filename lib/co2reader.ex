@@ -76,4 +76,20 @@ defmodule Co2reader do
       (0x100 + Enum.at(phase3, i) - Enum.at(ctmp, i))
       |> Bitwise.band(0xff)
   end
+
+  def checksum_valid?(data) when is_bitstring(data) do
+    :binary.bin_to_list(data)
+    |> checksum_valid?
+  end
+
+  def checksum_valid?(data) when is_list(data) do
+    data
+    |> Enum.at(4) == 0x0d and
+    (
+      (Enum.take(data, 3)
+        |> Enum.reduce(fn x,acc -> x+acc end)
+        |> Bitwise.band(0xff))
+      |> Kernel.==(Enum.at(data, 3))
+    )
+  end
 end
