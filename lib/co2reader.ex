@@ -9,20 +9,22 @@ defmodule Co2reader do
   @random_key [0xc4, 0xc6, 0xc0, 0x92, 0x40, 0x23, 0xdc, 0x96]
 
   def open(vendor_id \\ @vendor_id, product_id \\ @product_id) do
-    HID.open(vendor_id, product_id)
+    {:ok, ref} = HID.open(vendor_id, product_id)
+    ref
   end
 
   def read(device, size \\ 9) do
-    HID.read(device, size)
+    {:ok, data} = HID.read(device, size)
+    data
   end
 
   # Data takes a key used for encryption, use a default static key
-  def set_report(device, data \\ @random_key) when is_list(data) do
+  def set_report(device, key \\ @random_key) when is_list(key) do
     # prepend with 0x00
-    HID.write_report(device, [0x00 | data])
+    {:ok, _bytes} = HID.write_report(device, [0x00 | key])
   end
 
-  def decrypt(key, data) do
+  def decrypt(data, key \\ @random_key) do
     cstate = [0x48,  0x74,  0x65,  0x6D,  0x70,  0x39,  0x39,  0x65]
     shuffle = [2, 4, 0, 7, 1, 6, 5, 3]
 
