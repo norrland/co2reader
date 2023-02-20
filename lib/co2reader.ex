@@ -3,6 +3,8 @@ defmodule Co2reader do
   Documentation for `Co2reader`.
   """
 
+  require Logger
+
   @vendor_id 1241
   @product_id 41042
 
@@ -94,4 +96,30 @@ defmodule Co2reader do
       |> Kernel.==(Enum.at(data, 3))
     )
   end
+
+  def parse_data(data) when is_bitstring(data) do
+    data
+    |> :binary.bin_to_list
+    |> parse_data
+  end
+
+  def parse_data(data) when is_list(data) do
+    Logger.debug("data: #{inspect(data)}")
+    identifier = Enum.at(data, 0)
+    value = Bitwise.bor(
+      Bitwise.bsl(
+        Enum.at(data, 1), 8),
+        Enum.at(data, 2)
+      )
+
+    Logger.debug("ID: #{identifier} - #{value}")
+    case {identifier, value} do
+      {0x53, val} -> %{unknown: val}
+      {0x50, val} -> %{co2: val}
+      {0x42, val} -> %{temp: val/16.0-273.15 |> Float.round(2)}
+      {0x44, val} -> %{rh: val/100.0 |> Float.round(2)}
+      {0x41, val} -> %{rh: val/100.0 |> Float.round(2)}
+    end
+  end
+
 end
